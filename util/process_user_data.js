@@ -1,3 +1,49 @@
+function getDesiredFieldsFromAccount(type,json) {
+  if(type=="DEPOSIT"){
+    return {
+      maskedAccountNumber: json.maskedAccountNumber,
+      fiType: json.fiType,
+      name: json.data.Profile.Holders.Holder[0].name,
+      pan: json.data.Profile.Holders.Holder[0].pan,
+      ifsc: json.data.Summary.ifscCode,
+      currentbalance: json.data.Summary.currentBalance,
+      currency: json.data.Summary.currency,
+      branch:json.data.Summary.branch,
+          mobile: json.data.Profile.Holders.Holder[0].mobile,
+      };
+  }
+  if(type=="EQUITIES"){
+    return {
+        maskedAccountNumber: json.maskedAccountNumber,
+        fiType: json.fiType,
+        name: json.data.Account.Profile.Holders.Holder.name,
+        mobile: json.data.Account.Profile.Holders.Holder.mobile,
+        dematId: json.data.Account.Profile.Holders.Holder.dematId,
+        pan: json.data.Account.Profile.Holders.Holder.pan,
+        investmentvalue: json.data.Account.Summary.investmentValue,
+        currentValue: json.data.Account.Summary.currentValue
+      }
+  }  
+  if(type=="MUTUAL_FUNDS"){
+    return {
+        maskedAccountNumber: json.maskedAccountNumber,
+        fiType: json.fiType,
+        name: json.data.Account.Profile.Holders.Holder.name,
+        mobile: json.data.Account.Profile.Holders.Holder.mobile,
+        pan: json.data.Account.Profile.Holders.Holder.pan,
+        dematId: json.data.Account.Profile.Holders.Holder.dematId,
+      };
+  }else{
+     return {
+        maskedAccountNumber: json.maskedAccountNumber,
+        fiType: json.data.Account.type,
+        name: json.data.Account.Profile.Holders.Holder.name,
+        mobile: json.data.Account.Profile.Holders.Holder.mobile,
+        pan: json.data.Account.Profile.Holders.Holder.pan,
+      };
+  }
+}
+
 const processUserDataFI = (type,data) => {
   var processedData=null
   var reply ={}
@@ -103,6 +149,14 @@ const processUserDataAA = (type,data) => {
                 "counterParty": temp[i].counterParty,
                 "category": temp[i].category,
             })
+        }
+        if(processedData)
+        processedData.reverse()
+    }else if(type=="accounts"){
+        var temp =data.accounts;
+        for (i in temp){
+            if(processedData==null)processedData=[]
+            processedData.push(getDesiredFieldsFromAccount(temp[i].fiType,temp[i]))
         }
         if(processedData)
         processedData.reverse()
