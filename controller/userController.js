@@ -1,12 +1,13 @@
 const User = require("../schema/userSchema");
 const bcrypt = require("bcrypt");
 const redis = require('redis');
+const config = require("./config");
+
 const { RateLimiterRedis } = require('rate-limiter-flexible');
 // You may also use Mongo, Memory or any other limiter type
 
-const redisClient = redis.createClient({
-  enable_offline_queue: false,
-});
+const redisClient = redis.createClient( config.redis_port, config.redis_url,
+{  enable_offline_queue: false});
 
 const maxConsecutiveFailsByMobile = 5;
 

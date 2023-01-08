@@ -1,0 +1,3 @@
+Local Testing :
+
+Redis service needs to be started in th Server
