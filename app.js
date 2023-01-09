@@ -78,7 +78,7 @@ app.get("/init/:mobileNumber", async (req, res) => {
 
 //Getting consent status
 app.get("/consent/status/:mobileNumber", async (req, res) => {
-  
+  try{
   let mobile = req.params.mobileNumber
   let user = await userDetails(mobile)
   if(!user||!user.trackingId){
@@ -106,7 +106,10 @@ app.get("/consent/status/:mobileNumber", async (req, res) => {
     .catch(function (error) {
       console.log(error);
       res.end(JSON.stringify({"status":"ERROR"}));
-    });
+    });}
+    catch(err){
+      res.end(JSON.stringify({"status":"ERROR"}));
+    }
 });
 
 //Getting user data from FIP 
