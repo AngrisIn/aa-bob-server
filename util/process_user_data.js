@@ -9,7 +9,7 @@ function getDesiredFieldsFromAccount(type,json) {
       currentbalance: json.data.Summary.currentBalance,
       currency: json.data.Summary.currency,
       branch:json.data.Summary.branch,
-          mobile: json.data.Profile.Holders.Holder[0].mobile,
+      mobile: json.data.Profile.Holders.Holder[0].mobile,
       };
   }
   if(type=="EQUITIES"){
