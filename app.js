@@ -81,7 +81,7 @@ app.get("/consent/status/:mobileNumber", async (req, res) => {
   
   let mobile = req.params.mobileNumber
   let user = await userDetails(mobile)
-  if(user&&!user.trackingId){
+  if(!user||!user.trackingId){
     res.end(JSON.stringify({"status":"NO_TRACKING_ID"}));
   }
   var requestConfig = {
@@ -115,7 +115,7 @@ app.get("/data/fi/:mobileNumber/:type", async (req, res) => {
   let mobile = req.params.mobileNumber
   let type = req.params.type
   let user = await idDetailsOfUser(mobile)
-  if(user&&!user.trackingId){
+  if(!user||!user.trackingId){
     res.end(JSON.stringify({"status":"NO_TRACKING_ID"}));
   }
   var requestConfig = {
@@ -148,7 +148,7 @@ app.get("/data/aa/:mobileNumber/:type", async (req, res) => {
   console.log(type,mobile)
 
   let user = await idDetailsOfUser(mobile)
-  if(user&&!user.trackingId){
+  if(!user||!user.trackingId){
     res.end(JSON.stringify({"status":"NO_TRACKING_ID"}));
   }
   var requestConfig = {
