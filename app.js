@@ -14,6 +14,7 @@ const {updateAAID,userDetails,idDetailsOfUser} = require("./util/db_fucntion")
 const userRouter = require('./routes/userRouter');
 const {processUserDataAA,processUserDataFI} = require("./util/process_user_data");
 
+const use = fn=>(req,res,next)=>{Promise.resolve(fn(req,res,next)).catch(next)}
 
 // use the express-static middleware
 
@@ -35,7 +36,7 @@ app.get("/", function (req, res) {
 });
 
 ///// CREATE INIT CALL
-app.get("/init/:mobileNumber", async (req, res) => {
+app.get("/init/:mobileNumber",use( async (req, res) => {
   console.log("Serve Consent");
   let mobile = req.params.mobileNumber
   // let user = await userDetails(mobile)
@@ -73,12 +74,11 @@ app.get("/init/:mobileNumber", async (req, res) => {
       res.end(JSON.stringify({"url":null,"trackingId":null,"referenceId":null}));
     });
 
-});
+}));
 
 
 //Getting consent status
-app.get("/consent/status/:mobileNumber", async (req, res) => {
-  try{
+app.get("/consent/status/:mobileNumber", use(async (req, res) => {
   let mobile = req.params.mobileNumber
   let user = await userDetails(mobile)
   if(!user||!user.trackingId){
@@ -106,14 +106,11 @@ app.get("/consent/status/:mobileNumber", async (req, res) => {
     .catch(function (error) {
       console.log(error);
       res.end(JSON.stringify({"status":"ERROR"}));
-    });}
-    catch(err){
-      res.end(JSON.stringify({"status":"ERROR"}));
-    }
-});
+    })
+}));
 
 //Getting user data from FIP 
-app.get("/data/fi/:mobileNumber/:type", async (req, res) => {
+app.get("/data/fi/:mobileNumber/:type", use(async (req, res) => {
   
   let mobile = req.params.mobileNumber
   let type = req.params.type
@@ -140,11 +137,11 @@ app.get("/data/fi/:mobileNumber/:type", async (req, res) => {
       res.end(JSON.stringify({"status":"ERROR"}));
     });
 
-});
+}));
 
 
 //Getting user data from AA 
-app.get("/data/aa/:mobileNumber/:type", async (req, res) => {
+app.get("/data/aa/:mobileNumber/:type", use(async (req, res) => {
   
   let mobile = req.params.mobileNumber
   let type = req.params.type
@@ -173,7 +170,7 @@ app.get("/data/aa/:mobileNumber/:type", async (req, res) => {
       res.end(JSON.stringify({"status":"ERROR"}));
     });
 
-});
+}));
 
 app.post("/redirect", (req, res) => {
   console.log("In redirect");

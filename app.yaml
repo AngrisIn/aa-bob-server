@@ -1,5 +1,5 @@
 runtime: nodejs16
-env: standard
+env: flex
 
 handlers:
 - url: /.*
