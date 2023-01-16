@@ -57,9 +57,11 @@ const processUserDataFI = (type,data) => {
         }
       }
     }
+    
     var summary = data[index]['Account']['Summary']['Investment']
     var alldetails = data[index]['Account']['Transactions']['Transaction']
-      summary.forEach(function(i,index){
+    console.log(alldetails)
+    summary.forEach(function(i,index){
         // i.forEach(function(j,index){
           var raw  = i["Holdings"]
           raw.forEach(function(k,index){
@@ -73,10 +75,12 @@ const processUserDataFI = (type,data) => {
               "lastTradedPrice": k['Holding']["lastTradedPrice"],
               "dateOfInvestment": d[0],
               "timeOfInvestment": d[1],
+              "isin":k['Holding']["isin"]
             })
           })
       //  })
-      })
+
+    })
       if(processedData)
         processedData.reverse()
       reply['summary'] = processedData;
@@ -94,6 +98,10 @@ const processUserDataFI = (type,data) => {
           "tradeValue": i['tradeValue'],
           "type": i['type'],
           "units": i['units'],
+          "instrumentType": i['instrumentType'],
+          "optionType":i["optionType"],
+          "isin":i["isin"],
+          
         })
       })
       if(processedData)
@@ -111,6 +119,34 @@ const processUserDataFI = (type,data) => {
         }
       }
     }
+    var summary = data[index]['Account']['Summary']['Investment']['Holdings']
+    try{
+      summary.forEach(function(k,index){
+          if(processedData==null)processedData=[]
+          processedData.push({
+            "isin": k['Holding']["isin"],
+            "amc": k['Holding']["amc"],
+            "closingUnits": k['Holding']["closingUnits"],
+            "rate": k['Holding']["rate"],
+            "nav": k['Holding']["nav"],
+          })
+    })
+    }catch(err){
+      if(processedData==null)processedData=[]
+      processedData.push({
+        "isin": summary['Holding']["isin"],
+        "amc": summary['Holding']["amc"],
+        "closingUnits": summary['Holding']["closingUnits"],
+        "rate": summary['Holding']["rate"],
+        "nav": summary['Holding']["nav"],
+      })
+    }
+    if(processedData)
+      processedData.reverse()
+    reply['summary'] = processedData;
+    console.log(reply)
+
+    processedData=null
     var all = data[index]['Account']['Transactions']['Transaction']
       all.forEach(function(i,index){
         // i.forEach(function(j,index){
