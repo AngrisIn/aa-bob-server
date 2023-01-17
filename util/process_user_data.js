@@ -129,6 +129,8 @@ const processUserDataFI = (type,data) => {
             "closingUnits": k['Holding']["closingUnits"],
             "rate": k['Holding']["rate"],
             "nav": k['Holding']["nav"],
+            "amfiCode":k['Holding']["amfiCode"],
+            "schemeCode":k['Holding']["schemeCode"],
           })
     })
     }catch(err){
@@ -139,15 +141,17 @@ const processUserDataFI = (type,data) => {
         "closingUnits": summary['Holding']["closingUnits"],
         "rate": summary['Holding']["rate"],
         "nav": summary['Holding']["nav"],
+        "amfiCode":summary['Holding']["amfiCode"],
+        "schemeCode":summary['Holding']["schemeCode"],
       })
     }
     if(processedData)
       processedData.reverse()
     reply['summary'] = processedData;
-    console.log(reply)
 
     processedData=null
     var all = data[index]['Account']['Transactions']['Transaction']
+    console.log(all)
       all.forEach(function(i,index){
         // i.forEach(function(j,index){
             if(processedData==null)processedData=[]
