@@ -133,6 +133,7 @@ const processUserDataFI = (type,data) => {
             "schemeCode":k['Holding']["schemeCode"],
           })
     })
+    
     }catch(err){
       if(processedData==null)processedData=[]
       processedData.push({
