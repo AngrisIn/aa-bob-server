@@ -1,4 +1,5 @@
 // create an express app
+
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -10,6 +11,7 @@ const database = require("./database")  //function intialised on return directly
 const initConsent = require("./util/init_consent");
 const {updateAAID,userDetails,idDetailsOfUser} = require("./util/db_fucntion")
 
+const {getMetrics} = require("./util/filter");
 // ROUTERS
 const userRouter = require('./routes/userRouter');
 const {processUserDataAA,processUserDataFI} = require("./util/process_user_data");
@@ -162,8 +164,14 @@ app.get("/data/aa/:mobileNumber/:type", use(async (req, res) => {
 
   axios(requestConfig)
     .then(function (response) {
-      var result =  processUserDataAA(type,response.data)
-      res.end(JSON.stringify({"status":"Check server for fetched data details","data":result}));
+      if(type=="Metrics"){
+        var result =  getMetrics(response.data)
+        res.end(JSON.stringify({"status":"Check server for fetched data details","data":result}));
+          
+      }else{
+        var result =  processUserDataAA(type,response.data)
+        res.end(JSON.stringify({"status":"Check server for fetched data details","data":result}));  
+      }
     })
     .catch(function (error) {
       console.log(error);

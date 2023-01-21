@@ -9,6 +9,7 @@
   "author": "Krishnan",
   "license": "MIT",
   "dependencies": {
+    "@tensorflow/tfjs-node": "^4.2.0",
     "@vonage/server-sdk": "^3.0.12",
     "axios": "^0.21.1",
     "base64url": "^3.0.1",
